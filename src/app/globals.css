@@ -1,0 +1,150 @@
+@import "tailwindcss";
+@import "../styles/typography.css";
+@import "../styles/brutalism.css";
+@import "../styles/animations.css";
+@import "lenis/dist/lenis.css";
+
+:root {
+  --color-void: #000000;
+  --color-white: #ffffff;
+  --color-off-white: #f5f5f0;
+  --color-bone: #e8e8e0;
+  --color-accent: #0047FF;
+  --color-accent-hover: #0035cc;
+  --color-accent-light: #e0e8ff;
+  --color-accent-glow: rgba(0, 71, 255, 0.25);
+  --color-green: #00ff88;
+  --color-green-muted: #00cc6a;
+  --color-amber: #ffb800;
+  --color-red: #ff3b30;
+  --color-gray-100: #f0f0ec;
+  --color-gray-200: #d8d8d2;
+  --color-gray-300: #b8b8b0;
+  --color-gray-400: #888880;
+  --color-gray-500: #585850;
+  --color-gray-600: #383830;
+  --color-gray-700: #242420;
+  --color-gray-800: #141410;
+  --color-gray-900: #0a0a08;
+  --border-thick: 3px solid var(--color-void);
+  --border-medium: 2px solid var(--color-void);
+  --border-thin: 1px solid var(--color-void);
+  --border-accent: 2px solid var(--color-accent);
+  --border-white: 2px solid var(--color-white);
+  /* --font-display / --font-mono / --font-body set on body in layout.tsx */
+  --space-unit: 8px;
+  --bento-gap: 12px;
+  --section-padding: clamp(64px, 12vw, 120px);
+  --shadow-brutal-sm: 3px 3px 0px var(--color-void);
+  --shadow-brutal-md: 5px 5px 0px var(--color-void);
+  --shadow-brutal-lg: 8px 8px 0px var(--color-void);
+  --shadow-brutal-accent: 5px 5px 0px var(--color-accent);
+  --shadow-brutal-green: 5px 5px 0px var(--color-green);
+  --grid-cols: 12;
+  --container-max: 1400px;
+  --container-padding: 40px;
+}
+
+[data-theme="dark"] {
+  --color-void: #ffffff;
+  --color-white: #0a0a08;
+  --color-off-white: #121210;
+  --color-bone: #1a1a16;
+  --border-thick: 3px solid #ffffff;
+  --border-medium: 2px solid #ffffff;
+  --border-thin: 1px solid rgba(255, 255, 255, 0.2);
+  --shadow-brutal-sm: 3px 3px 0px rgba(255, 255, 255, 0.9);
+  --shadow-brutal-md: 5px 5px 0px rgba(255, 255, 255, 0.9);
+  --shadow-brutal-lg: 8px 8px 0px rgba(255, 255, 255, 0.9);
+}
+
+@theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-background: var(--color-off-white);
+  --color-foreground: var(--color-void);
+  --color-accent: #0047FF;
+  --color-accent-hover: #0035cc;
+  --color-void: #000000;
+  --color-green: #00ff88;
+  --color-amber: #ffb800;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  background: var(--color-off-white);
+  color: var(--color-void);
+  font-family: var(--font-body);
+}
+
+[data-theme="dark"] body {
+  background: #0a0a08;
+  color: #f5f5f0;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 9999;
+  padding: 12px 20px;
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.skip-link:focus {
+  left: 16px;
+  top: 16px;
+}
+
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 0;
+  background: var(--color-accent);
+  transition: width 0.2s ease;
+}
+.nav-underline:hover::after {
+  width: 100%;
+}
+
+.input-brutal {
+  width: 100%;
+  border: none;
+  border-bottom: 3px solid var(--color-void);
+  background: transparent;
+  padding: 10px 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+.input-brutal:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

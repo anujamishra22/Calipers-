@@ -1,0 +1,67 @@
+<%
+  var impl = '';
+  var resText = '{}';
+  if (study) {
+    impl = Array.isArray(study.implementation) ? study.implementation.join('\n') : '';
+    resText = study.results && typeof study.results === 'object' ? JSON.stringify(study.results, null, 2) : '{}';
+  }
+  var section = 'Case studies';
+  var pageActions = '<a href="/admin/case-studies" class="btn secondary">← Back to list</a>';
+%>
+<%- include('../partials/header') %>
+
+<form method="post" action="<%= study ? '/admin/case-studies/' + study.id + '/update' : '/admin/case-studies' %>" class="card">
+  <label for="headline">Headline</label>
+  <input id="headline" type="text" name="headline" required value="<%= study ? study.headline : '' %>" />
+
+  <label for="slug">Slug (optional)</label>
+  <input id="slug" type="text" name="slug" value="<%= study ? study.slug : '' %>" />
+
+  <label for="client">Client</label>
+  <input id="client" type="text" name="client" required value="<%= study ? study.client : '' %>" />
+
+  <label for="industry">Industry</label>
+  <input id="industry" type="text" name="industry" required value="<%= study ? study.industry : '' %>" />
+
+  <label>Challenge</label>
+  <%- include('../partials/rich-toolbar', { textareaId: 'csChallenge' }) %>
+  <textarea name="challenge" id="csChallenge" class="rte-input" rows="4" required><%= study ? study.challenge : '' %></textarea>
+
+  <label>Solution</label>
+  <%- include('../partials/rich-toolbar', { textareaId: 'csSolution' }) %>
+  <textarea name="solution" id="csSolution" class="rte-input" rows="4"><%= study && study.solution ? study.solution : '' %></textarea>
+
+  <label for="metric">Metric</label>
+  <input id="metric" type="text" name="metric" required value="<%= study ? study.metric : '' %>" />
+
+  <label for="metricLabel">Metric label</label>
+  <input id="metricLabel" type="text" name="metricLabel" required value="<%= study ? study.metricLabel : '' %>" />
+
+  <label>Implementation (one line per bullet)</label>
+  <%- include('../partials/rich-toolbar', { textareaId: 'csImplementation' }) %>
+  <textarea name="implementation" id="csImplementation" class="rte-input" rows="6"><%= impl %></textarea>
+
+  <label for="results">Results (JSON object)</label>
+  <textarea id="results" name="results" rows="6"><%= resText %></textarea>
+
+  <label for="csCover">Cover image URL</label>
+  <input id="csCover" type="text" name="coverImage" value="<%= study && study.coverImage ? study.coverImage : '' %>" />
+
+  <label for="csCoverFile">Upload image</label>
+  <input id="csCoverFile" type="file" accept="image/*" />
+  <button type="button" class="secondary" onclick="uploadCover('csCoverFile','csCover')">Upload to server</button>
+
+  <label style="margin-top: 1rem">
+    <input type="checkbox" name="featured" <%= study && study.featured ? 'checked' : '' %> /> Featured
+  </label>
+  <label>
+    <input type="checkbox" name="published" <%= !study || study.published ? 'checked' : '' %> /> Published
+  </label>
+
+  <div class="form-actions">
+    <button type="submit">Save</button>
+    <a href="/admin/case-studies" class="btn secondary">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

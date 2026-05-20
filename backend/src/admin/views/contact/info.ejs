@@ -1,0 +1,24 @@
+<% var section = 'Contact'; %>
+<%- include('../partials/header') %>
+
+<form method="post" action="/admin/contact/info" class="card">
+  <label for="email">Public email</label>
+  <input id="email" type="email" name="email" required value="<%= info.email %>" />
+
+  <label for="phone">Phone</label>
+  <input id="phone" type="text" name="phone" value="<%= info.phone || '' %>" />
+
+  <label for="address">Address</label>
+  <textarea id="address" name="address" rows="3"><%= info.address || '' %></textarea>
+
+  <label for="socials">Socials (JSON object)</label>
+  <p class="field-hint">Example: <code>{"twitter":"https://twitter.com/calipersai","linkedin":"https://..."}</code></p>
+  <textarea id="socials" name="socials" rows="6"><%= socialsText %></textarea>
+
+  <div class="form-actions">
+    <button type="submit">Save changes</button>
+    <a href="/admin" class="btn secondary">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

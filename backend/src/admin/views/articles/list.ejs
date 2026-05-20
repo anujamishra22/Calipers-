@@ -1,0 +1,60 @@
+<%
+  var section = 'Articles';
+  var pageActions = '<a href="/admin/articles/new" class="btn">+ New article</a>';
+%>
+<%- include('../partials/header') %>
+
+<div class="card">
+  <% if (!articles.length) { %>
+    <div class="empty">
+      <div class="empty-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5V4a2 2 0 0 1 2-2h11l3 3v14.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
+          <line x1="8" y1="8" x2="16" y2="8"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+          <line x1="8" y1="16" x2="13" y2="16"/>
+        </svg>
+      </div>
+      <p>No articles yet.</p>
+      <a href="/admin/articles/new" class="btn" style="margin-top:14px">+ New article</a>
+    </div>
+  <% } else { %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Slug</th>
+          <th>Status</th>
+          <th style="width:1%; text-align:right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% articles.forEach(function (a) { %>
+        <tr>
+          <td style="font-weight:600; color:var(--text-strong)"><%= a.title %></td>
+          <td><code><%= a.slug %></code></td>
+          <td>
+            <% if (a.published) { %>
+              <span class="pill pill-on">Published</span>
+            <% } else { %>
+              <span class="pill pill-off">Draft</span>
+            <% } %>
+          </td>
+          <td>
+            <div class="row-actions" style="justify-content:flex-end">
+              <a href="/admin/articles/<%= a.id %>/edit" class="btn secondary btn-sm">Edit</a>
+              <form method="post" action="/admin/articles/<%= a.id %>/delete" style="display:inline" onsubmit="return confirm('Delete?');">
+                <button type="submit" class="danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

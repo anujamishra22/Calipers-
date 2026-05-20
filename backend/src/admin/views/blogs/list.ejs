@@ -1,0 +1,58 @@
+<%
+  var section = 'Blogs';
+  var pageActions = '<a href="/admin/blogs/new" class="btn">+ New blog</a>';
+%>
+<%- include('../partials/header') %>
+
+<div class="card">
+  <% if (!posts.length) { %>
+    <div class="empty">
+      <div class="empty-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+      </div>
+      <p>No blog posts yet — create your first one.</p>
+      <a href="/admin/blogs/new" class="btn" style="margin-top:14px">+ New blog</a>
+    </div>
+  <% } else { %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Slug</th>
+          <th>Status</th>
+          <th style="width:1%; text-align:right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% posts.forEach(function (p) { %>
+        <tr>
+          <td style="font-weight:600; color:var(--text-strong)"><%= p.title %></td>
+          <td><code><%= p.slug %></code></td>
+          <td>
+            <% if (p.published) { %>
+              <span class="pill pill-on">Published</span>
+            <% } else { %>
+              <span class="pill pill-off">Draft</span>
+            <% } %>
+          </td>
+          <td>
+            <div class="row-actions" style="justify-content:flex-end">
+              <a href="/admin/blogs/<%= p.id %>/edit" class="btn secondary btn-sm">Edit</a>
+              <form method="post" action="/admin/blogs/<%= p.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this post?');">
+                <button type="submit" class="danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

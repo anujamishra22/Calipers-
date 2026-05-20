@@ -1,0 +1,140 @@
+.bento-card {
+  background: var(--color-off-white);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-brutal-md);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+.bento-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0px var(--color-void);
+}
+
+.bento-card-dark {
+  background: var(--color-gray-800);
+  border: 2px solid var(--color-gray-600);
+  color: var(--color-off-white);
+}
+
+.bento-card-accent {
+  background: var(--color-accent);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-brutal-md);
+  color: var(--color-white);
+}
+
+.raw-badge {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: var(--border-thick);
+  padding: 3px 8px;
+  display: inline-block;
+}
+
+.btn-brutal {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-brutal-md);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  background: var(--color-accent);
+  color: var(--color-white);
+}
+.btn-brutal:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0px var(--color-void);
+}
+.btn-brutal:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--color-void);
+}
+.btn-brutal-outline {
+  background: transparent;
+  color: var(--color-void);
+}
+[data-theme="dark"] .btn-brutal-outline {
+  color: var(--color-off-white);
+}
+.btn-brutal-outline:hover {
+  background: var(--color-void);
+  color: var(--color-white);
+}
+[data-theme="dark"] .btn-brutal-outline:hover {
+  background: var(--color-white);
+  color: var(--color-void);
+}
+
+.section-divider {
+  width: 100%;
+  height: 3px;
+  background: var(--color-void);
+  margin: 0;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(var(--color-gray-200) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-gray-200) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+[data-theme="dark"] .grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+}
+
+.metric-giant {
+  font-family: var(--font-mono);
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-accent);
+}
+
+.card-label-strip {
+  width: 100%;
+  padding: 6px 16px;
+  border-bottom: var(--border-thin);
+  background: var(--color-bone);
+  color: var(--color-void);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Ensure label strip contrast on dark bento cards (e.g. CoreSolutions section). */
+[data-theme="dark"] .bento-card-dark .card-label-strip {
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-off-white);
+}
+
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05;
+}
+
+.bento-grid {
+  width: 100%;
+}

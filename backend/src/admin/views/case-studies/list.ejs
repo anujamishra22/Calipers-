@@ -1,0 +1,58 @@
+<%
+  var section = 'Case studies';
+  var pageActions = '<a href="/admin/case-studies/new" class="btn">+ New case study</a>';
+%>
+<%- include('../partials/header') %>
+
+<div class="card">
+  <% if (!studies.length) { %>
+    <div class="empty">
+      <div class="empty-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
+      </div>
+      <p>No case studies yet.</p>
+      <a href="/admin/case-studies/new" class="btn" style="margin-top:14px">+ New case study</a>
+    </div>
+  <% } else { %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Headline</th>
+          <th>Client</th>
+          <th>Featured</th>
+          <th style="width:1%; text-align:right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% studies.forEach(function (s) { %>
+        <tr>
+          <td style="font-weight:600; color:var(--text-strong)"><%= s.headline %></td>
+          <td><%= s.client %></td>
+          <td>
+            <% if (s.featured) { %>
+              <span class="pill pill-accent">Featured</span>
+            <% } else { %>
+              <span class="pill pill-off">Standard</span>
+            <% } %>
+          </td>
+          <td>
+            <div class="row-actions" style="justify-content:flex-end">
+              <a href="/admin/case-studies/<%= s.id %>/edit" class="btn secondary btn-sm">Edit</a>
+              <form method="post" action="/admin/case-studies/<%= s.id %>/delete" style="display:inline" onsubmit="return confirm('Delete?');">
+                <button type="submit" class="danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

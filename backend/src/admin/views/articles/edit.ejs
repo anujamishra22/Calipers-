@@ -1,0 +1,42 @@
+<%
+  var section = 'Articles';
+  var pageActions = '<a href="/admin/articles" class="btn secondary">← Back to list</a>';
+%>
+<%- include('../partials/header') %>
+
+<form method="post" action="<%= article ? '/admin/articles/' + article.id + '/update' : '/admin/articles' %>" class="card">
+  <label for="title">Title</label>
+  <input id="title" type="text" name="title" required value="<%= article ? article.title : '' %>" />
+
+  <label for="slug">Slug (optional)</label>
+  <input id="slug" type="text" name="slug" value="<%= article ? article.slug : '' %>" />
+
+  <label for="tags">Tags (comma-separated)</label>
+  <input id="tags" type="text" name="tags" value="<%= article && Array.isArray(article.tags) ? article.tags.join(', ') : '' %>" />
+
+  <label>Summary</label>
+  <%- include('../partials/rich-toolbar', { textareaId: 'articleSummary' }) %>
+  <textarea name="summary" id="articleSummary" class="rte-input" rows="3" required><%= article ? article.summary : '' %></textarea>
+
+  <label>Content</label>
+  <%- include('../partials/rich-toolbar', { textareaId: 'articleContent' }) %>
+  <textarea name="content" id="articleContent" class="rte-input" rows="14" required><%= article ? article.content : '' %></textarea>
+
+  <label for="articleCover">Cover image URL</label>
+  <input id="articleCover" type="text" name="coverImage" value="<%= article && article.coverImage ? article.coverImage : '' %>" />
+
+  <label for="articleCoverFile">Upload image</label>
+  <input id="articleCoverFile" type="file" accept="image/*" />
+  <button type="button" class="secondary" onclick="uploadCover('articleCoverFile','articleCover')">Upload to server</button>
+
+  <label style="margin-top: 1rem">
+    <input type="checkbox" name="published" <%= article && article.published ? 'checked' : '' %> /> Published
+  </label>
+
+  <div class="form-actions">
+    <button type="submit">Save</button>
+    <a href="/admin/articles" class="btn secondary">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

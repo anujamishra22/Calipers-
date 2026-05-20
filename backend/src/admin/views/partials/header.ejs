@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= typeof title !== 'undefined' ? title + ' · Calipers Admin' : 'Calipers Admin' %></title>
+    <link rel="stylesheet" href="/admin/static/admin.css" />
+  </head>
+  <body>
+    <%
+      var current = (typeof currentPath !== 'undefined' && currentPath) ? currentPath : '';
+      function isActive(prefix) {
+        if (prefix === '/admin') return current === '/admin' || current === '/admin/';
+        return current === prefix || current.indexOf(prefix + '/') === 0;
+      }
+      var navItems = [
+        { href: '/admin', label: 'Dashboard', match: '/admin', icon: 'dashboard' },
+        { href: '/admin/blogs', label: 'Blogs', match: '/admin/blogs', icon: 'blog' },
+        { href: '/admin/articles', label: 'Articles', match: '/admin/articles', icon: 'article' },
+        { href: '/admin/case-studies', label: 'Case studies', match: '/admin/case-studies', icon: 'case' },
+        { href: '/admin/contact/submissions', label: 'Submissions', match: '/admin/contact/submissions', icon: 'inbox' },
+        { href: '/admin/contact/info', label: 'Contact info', match: '/admin/contact/info', icon: 'contact' }
+      ];
+
+      function navIcon(name) {
+        switch (name) {
+          case 'dashboard':
+            return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>';
+          case 'blog':
+            return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>';
+          case 'article':
+            return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V4a2 2 0 0 1 2-2h11l3 3v14.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>';
+          case 'case':
+            return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>';
+          case 'inbox':
+            return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>';
+          case 'contact':
+            return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+          default:
+            return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>';
+        }
+      }
+
+      var userEmail = (typeof adminEmail !== 'undefined' && adminEmail) ? adminEmail : '';
+      var userInitials = userEmail ? userEmail.charAt(0).toUpperCase() : 'A';
+
+      var section = typeof section !== 'undefined' && section ? section : 'Admin';
+    %>
+    <div class="layout">
+      <aside class="sidebar" aria-label="Admin navigation">
+        <div class="sidebar-brand">
+          <span class="brand-mark">C</span>
+          <span class="brand-text">
+            <strong>Calipers</strong>
+            <span>Admin // v1</span>
+          </span>
+        </div>
+
+        <p class="sidebar-section-label">Workspace</p>
+        <nav class="sidebar-nav">
+          <% navItems.forEach(function(item) { %>
+            <a href="<%= item.href %>" class="nav-link<%= isActive(item.match) ? ' active' : '' %>">
+              <%- navIcon(item.icon) %>
+              <span><%= item.label %></span>
+              <% if (typeof navBadges !== 'undefined' && navBadges && navBadges[item.icon]) { %>
+                <span class="nav-badge"><%= navBadges[item.icon] %></span>
+              <% } %>
+            </a>
+          <% }) %>
+        </nav>
+
+        <div class="sidebar-foot">
+          <% if (userEmail) { %>
+            <div class="userline">
+              <span class="avatar"><%= userInitials %></span>
+              <span><%= userEmail %></span>
+            </div>
+          <% } %>
+          <a href="/admin/logout" class="logout-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Log out</span>
+          </a>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <div class="crumbs">
+              <span><%= section %></span>
+              <% if (typeof title !== 'undefined' && title && title !== section) { %>
+                <span class="sep">/</span>
+                <span><%= title %></span>
+              <% } %>
+            </div>
+            <h1 class="page-title"><%= typeof title !== 'undefined' ? title : 'Admin' %></h1>
+          </div>
+          <div class="topbar-actions">
+            <%- typeof pageActions !== 'undefined' ? pageActions : '' %>
+          </div>
+        </header>
+
+        <div class="content">

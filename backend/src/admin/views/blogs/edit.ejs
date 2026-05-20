@@ -1,0 +1,47 @@
+<%
+  var section = 'Blogs';
+  var pageActions = '<a href="/admin/blogs" class="btn secondary">← Back to list</a>';
+%>
+<%- include('../partials/header') %>
+
+<form method="post" action="<%= post ? '/admin/blogs/' + post.id + '/update' : '/admin/blogs' %>" class="card">
+  <label for="title">Title</label>
+  <input id="title" type="text" name="title" required value="<%= post ? post.title : '' %>" />
+
+  <label for="slug">Slug (optional)</label>
+  <input id="slug" type="text" name="slug" value="<%= post ? post.slug : '' %>" placeholder="auto from title" />
+
+  <label for="category">Category</label>
+  <input id="category" type="text" name="category" required value="<%= post ? post.category : '' %>" />
+
+  <label for="readTime">Read time</label>
+  <input id="readTime" type="text" name="readTime" value="<%= post ? post.readTime : '5 min' %>" />
+
+  <label>Excerpt</label>
+  <%- include('../partials/rich-toolbar', { textareaId: 'blogExcerpt' }) %>
+  <p class="field-hint">Bold, italic, sizes (S–XL), and list buttons; paste from Word/Docs keeps lists when possible.</p>
+  <textarea name="excerpt" id="blogExcerpt" class="rte-input" rows="3" required><%= post ? post.excerpt : '' %></textarea>
+
+  <label>Content</label>
+  <%- include('../partials/rich-toolbar', { textareaId: 'blogContent' }) %>
+  <p class="field-hint">Blank line = new paragraph. Use list buttons or paste; select lines first to turn them into list items.</p>
+  <textarea name="content" id="blogContent" class="rte-input" rows="14" required><%= post ? post.content : '' %></textarea>
+
+  <label for="coverImage">Cover image URL</label>
+  <input id="coverImage" type="text" name="coverImage" value="<%= post && post.coverImage ? post.coverImage : '' %>" />
+
+  <label for="coverFile">Upload image</label>
+  <input id="coverFile" type="file" accept="image/*" />
+  <button type="button" class="secondary" onclick="uploadCover('coverFile','coverImage')">Upload to server</button>
+
+  <label style="margin-top: 1rem">
+    <input type="checkbox" name="published" <%= post && post.published ? 'checked' : '' %> /> Published
+  </label>
+
+  <div class="form-actions">
+    <button type="submit">Save</button>
+    <a href="/admin/blogs" class="btn secondary">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,40 @@
+<div class="rte-toolbar-box" aria-label="Formatting toolbar">
+  <div class="rte-toolbar-row rte-toolbar">
+    <span class="rte-toolbar-label">Text</span>
+    <button type="button" class="secondary rte-btn" onclick="rteWrap('<%= textareaId %>','strong')" title="Bold"><strong>B</strong></button>
+    <button type="button" class="secondary rte-btn" onclick="rteWrap('<%= textareaId %>','em')" title="Italic"><em>I</em></button>
+  </div>
+  <div class="rte-toolbar-row rte-toolbar">
+    <span class="rte-toolbar-label">Size</span>
+    <input
+      type="number"
+      class="rte-size-input"
+      id="<%= textareaId %>-fs"
+      min="10"
+      max="72"
+      step="1"
+      value="16"
+      aria-label="Font size in pixels"
+      title="Font size (px)"
+    />
+    <button
+      type="button"
+      class="secondary rte-btn"
+      onclick="rteFontSizePx('<%= textareaId %>','<%= textareaId %>-fs')"
+      title="Apply font size"
+    >
+      Apply
+    </button>
+  </div>
+  <div class="rte-toolbar-row rte-toolbar rte-toolbar-wrap">
+    <span class="rte-toolbar-label">Lists</span>
+    <button type="button" class="secondary rte-mini" onclick="rteInsertList('<%= textareaId %>','ul-disc')" title="Bullet disc">•</button>
+    <button type="button" class="secondary rte-mini" onclick="rteInsertList('<%= textareaId %>','ul-circle')" title="Bullet circle">○</button>
+    <button type="button" class="secondary rte-mini" onclick="rteInsertList('<%= textareaId %>','ul-square')" title="Bullet square">▪</button>
+    <button type="button" class="secondary rte-mini" onclick="rteInsertList('<%= textareaId %>','ol-1')" title="Numbered 1. 2.">1.</button>
+    <button type="button" class="secondary rte-mini" onclick="rteInsertList('<%= textareaId %>','ol-a')" title="Letters a. b.">a.</button>
+    <button type="button" class="secondary rte-mini" onclick="rteInsertList('<%= textareaId %>','ol-A')" title="Letters A. B.">A.</button>
+    <button type="button" class="secondary rte-mini" onclick="rteInsertList('<%= textareaId %>','ol-i')" title="Roman i. ii.">i.</button>
+    <button type="button" class="secondary rte-mini" onclick="rteInsertList('<%= textareaId %>','ol-I')" title="Roman I. II.">I.</button>
+  </div>
+</div>

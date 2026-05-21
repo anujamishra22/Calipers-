@@ -22,7 +22,7 @@ export function verifyToken(token: string): JwtPayload {
 export function setAuthCookie(res: Response, token: string) {
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: env.NODE_ENV === "production" ? "strict" : "lax",
     secure: env.NODE_ENV === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",

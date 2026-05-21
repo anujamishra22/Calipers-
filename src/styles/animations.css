@@ -26,6 +26,31 @@
   }
 }
 
+@keyframes terminal-border-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes terminal-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    box-shadow:
+      0 0 20px rgba(0, 71, 255, 0.45),
+      0 0 40px rgba(255, 255, 255, 0.08);
+  }
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 32px rgba(0, 71, 255, 0.7),
+      0 0 48px rgba(255, 255, 255, 0.22);
+  }
+}
+
 .scanlines::after {
   content: "";
   position: absolute;
@@ -52,10 +77,20 @@
   animation: blink 1s step-end infinite;
 }
 
+.animate-terminal-border-glow {
+  animation: terminal-border-rotate 3.5s linear infinite;
+}
+
+.animate-terminal-glow-pulse {
+  animation: terminal-glow-pulse 2.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-fast,
-  .animate-blink {
+  .animate-blink,
+  .animate-terminal-border-glow,
+  .animate-terminal-glow-pulse {
     animation: none !important;
   }
 }

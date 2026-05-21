@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { TerminalLottie } from "@/components/sections/about/TerminalLottie";
 import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
 
 export function CompanyOverview() {
@@ -19,8 +20,8 @@ export function CompanyOverview() {
         aria-hidden
       />
       <NoiseOverlay />
-      <div className="relative mx-auto flex w-full max-w-[var(--container-max)] items-center px-4 md:px-[var(--container-padding)]">
-        <div className="max-w-4xl">
+      <div className="relative mx-auto grid w-full max-w-[var(--container-max)] items-center gap-10 px-4 md:px-[var(--container-padding)] lg:grid-cols-2 lg:gap-8 xl:gap-12">
+        <div className="flex min-w-0 flex-col justify-center max-w-4xl lg:max-w-none lg:pr-4 xl:pr-8">
           <div className="flex flex-col">
             <p className="text-mono-sm font-medium uppercase tracking-[0.2em] text-[#0047FF]">
               About Calipers
@@ -57,6 +58,9 @@ export function CompanyOverview() {
               </span>
             </Link>
           </div>
+        </div>
+        <div className="flex min-w-0 items-center justify-center lg:pl-4 xl:pl-8">
+          <TerminalLottie />
         </div>
       </div>
     </section>

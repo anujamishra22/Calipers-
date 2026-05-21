@@ -1,5 +1,20 @@
-<% var section = 'Contact'; %>
+<% var section = 'Contact leads'; %>
 <%- include('../partials/header') %>
+
+<div class="page-toolbar" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px">
+  <div>
+    <p style="margin:0; color:var(--muted); font-size:14px">
+      <%= total %> lead<%= total === 1 ? '' : 's' %><% if (filterStatus) { %> · filter: <strong><%= filterStatus %></strong><% } %>
+    </p>
+  </div>
+  <div class="row-actions" style="flex-wrap:wrap">
+    <a href="/admin/contact/leads/export.csv<% if (filterStatus) { %>?status=<%= filterStatus %><% } %>" class="btn secondary btn-sm">Export CSV</a>
+    <a href="/admin/contact/submissions" class="btn secondary btn-sm<%= filterStatus === '' ? ' active' : '' %>">All</a>
+    <a href="/admin/contact/submissions?status=NEW" class="btn secondary btn-sm<%= filterStatus === 'NEW' ? ' active' : '' %>">New</a>
+    <a href="/admin/contact/submissions?status=READ" class="btn secondary btn-sm<%= filterStatus === 'READ' ? ' active' : '' %>">Read</a>
+    <a href="/admin/contact/submissions?status=ARCHIVED" class="btn secondary btn-sm<%= filterStatus === 'ARCHIVED' ? ' active' : '' %>">Archived</a>
+  </div>
+</div>
 
 <div class="card">
   <% if (!rows.length) { %>
@@ -10,7 +25,7 @@
           <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
         </svg>
       </div>
-      <p>No submissions yet.</p>
+      <p>No contact leads yet. Submissions from the website contact form appear here.</p>
     </div>
   <% } else { %>
   <div class="table-wrap">
@@ -20,6 +35,9 @@
           <th>When</th>
           <th>Name</th>
           <th>Email</th>
+          <th>Company</th>
+          <th>Size</th>
+          <th>Interests</th>
           <th>Message</th>
           <th>Status</th>
           <th style="width:1%; text-align:right">Actions</th>
@@ -31,7 +49,10 @@
           <td><code><%= new Date(r.createdAt).toISOString().slice(0, 16).replace('T', ' ') %></code></td>
           <td style="font-weight:600; color:var(--text-strong)"><%= r.name %></td>
           <td><a href="mailto:<%= r.email %>"><%= r.email %></a></td>
-          <td style="max-width:280px; white-space:pre-wrap; color:var(--muted); font-size:13px"><%= r.message %></td>
+          <td><%= r.company || '—' %></td>
+          <td><%= r.size || '—' %></td>
+          <td style="max-width:160px; font-size:12px; color:var(--muted)"><%= (r.interestsList && r.interestsList.length) ? r.interestsList.join(', ') : '—' %></td>
+          <td style="max-width:220px; white-space:pre-wrap; color:var(--muted); font-size:13px"><%= r.message %></td>
           <td>
             <span class="pill <%= r.status === 'NEW' ? 'pill-accent' : (r.status === 'ARCHIVED' ? 'pill-off' : 'pill-on') %>">
               <%= r.status %>
@@ -41,17 +62,20 @@
             <div class="row-actions" style="justify-content:flex-end">
               <% if (r.status !== 'READ') { %>
               <form method="post" action="/admin/contact/submissions/<%= r.id %>/status" style="display:inline">
+                <%- include('../partials/csrf-field') %>
                 <input type="hidden" name="status" value="READ" />
                 <button type="submit" class="secondary btn-sm">Mark read</button>
               </form>
               <% } %>
               <% if (r.status !== 'ARCHIVED') { %>
               <form method="post" action="/admin/contact/submissions/<%= r.id %>/status" style="display:inline">
+                <%- include('../partials/csrf-field') %>
                 <input type="hidden" name="status" value="ARCHIVED" />
                 <button type="submit" class="secondary btn-sm">Archive</button>
               </form>
               <% } %>
-              <form method="post" action="/admin/contact/submissions/<%= r.id %>/delete" style="display:inline" onsubmit="return confirm('Delete?');">
+              <form method="post" action="/admin/contact/submissions/<%= r.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this lead?');">
+                <%- include('../partials/csrf-field') %>
                 <button type="submit" class="danger btn-sm">Delete</button>
               </form>
             </div>

@@ -286,13 +286,24 @@ if (document.readyState === "loading") {
   bindRichPasteHandlers();
 }
 
+function getAdminCsrfToken() {
+  const match = document.cookie.match(/(?:^|;\s*)admin_csrf=([^;]*)/);
+  return match ? decodeURIComponent(match[1]) : "";
+}
+
 async function uploadCover(inputId, targetInputId) {
   const input = document.getElementById(inputId);
   const target = document.getElementById(targetInputId);
   if (!input || !input.files || !input.files[0] || !target) return;
   const fd = new FormData();
   fd.append("file", input.files[0]);
-  const res = await fetch("/api/uploads", { method: "POST", body: fd, credentials: "include" });
+  const csrf = getAdminCsrfToken();
+  const res = await fetch("/api/uploads", {
+    method: "POST",
+    body: fd,
+    credentials: "include",
+    headers: csrf ? { "X-CSRF-Token": csrf } : {},
+  });
   if (!res.ok) {
     alert("Upload failed");
     return;

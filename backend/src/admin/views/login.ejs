@@ -20,6 +20,7 @@
       <% } %>
 
       <form method="post" action="/admin/login">
+        <%- include('partials/csrf-field') %>
         <label for="email">Email</label>
         <input id="email" type="email" name="email" required autocomplete="username" autofocus />
         <label for="password">Password</label>

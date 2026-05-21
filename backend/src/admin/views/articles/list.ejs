@@ -45,6 +45,7 @@
             <div class="row-actions" style="justify-content:flex-end">
               <a href="/admin/articles/<%= a.id %>/edit" class="btn secondary btn-sm">Edit</a>
               <form method="post" action="/admin/articles/<%= a.id %>/delete" style="display:inline" onsubmit="return confirm('Delete?');">
+                <%- include('../partials/csrf-field') %>
                 <button type="submit" class="danger btn-sm">Delete</button>
               </form>
             </div>

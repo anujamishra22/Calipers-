@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { getBackendApiUrl } from "@/lib/api";
 
 const interests = [
   "GenAI & agents",
@@ -24,12 +25,36 @@ export function ContactForm() {
     tags: [] as string[],
   });
   const [pending, setPending] = useState(false);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPending(true);
-    const formId = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
+    const payload = {
+      name: local.name,
+      email: local.email,
+      company: local.company || undefined,
+      size: local.size || undefined,
+      message: local.message,
+      interests: local.tags,
+      website: honeypotRef.current?.value ?? "",
+    };
+
     try {
+      const apiRes = await fetch(`${getBackendApiUrl()}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!apiRes.ok) {
+        const err = (await apiRes.json().catch(() => null)) as {
+          error?: { message?: string };
+        } | null;
+        throw new Error(err?.error?.message ?? "Could not save your message");
+      }
+
+      const formId = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
       if (formId) {
         const fd = new FormData();
         fd.append("name", local.name);
@@ -38,13 +63,13 @@ export function ContactForm() {
         fd.append("size", local.size);
         fd.append("message", local.message);
         fd.append("interests", local.tags.join(", "));
-        const res = await fetch(`https://formspree.io/f/${formId}`, {
+        await fetch(`https://formspree.io/f/${formId}`, {
           method: "POST",
           body: fd,
           headers: { Accept: "application/json" },
-        });
-        if (!res.ok) throw new Error("Form error");
+        }).catch(() => undefined);
       }
+
       toast.success("✓ Message received. We'll respond within 24 hours.");
       setLocal({
         name: "",
@@ -54,8 +79,10 @@ export function ContactForm() {
         message: "",
         tags: [],
       });
-    } catch {
-      toast.error("Could not send — try again or email hello@caliper.com");
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : "Could not send your message";
+      toast.error(`${msg} — try again or email hello@caliper.com`);
     } finally {
       setPending(false);
     }
@@ -146,6 +173,17 @@ export function ContactForm() {
           onChange={(e) => setLocal({ ...local, message: e.target.value })}
         />
       </Field>
+      <input
+        ref={honeypotRef}
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        defaultValue=""
+        className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+        aria-hidden
+      />
+
       <button
         type="submit"
         suppressHydrationWarning

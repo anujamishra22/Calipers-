@@ -78,7 +78,7 @@ export function ServiceCategories() {
               }}
               aria-hidden
             />
-            <div className="relative isolate mx-auto w-full max-w-[min(100%,340px)] lg:max-w-[min(100%,400px)] xl:max-w-[min(100%,440px)]">
+            <div className="relative isolate mx-auto w-full max-w-[min(100%,408px)] lg:max-w-[min(100%,480px)] xl:max-w-[min(100%,528px)]">
               <div
                 className="relative"
                 style={{
@@ -97,7 +97,7 @@ export function ServiceCategories() {
                   alt="Isometric view of Calipers AI and software services hub with connected capability tiles"
                   width={1200}
                   height={800}
-                  className="mx-auto h-auto max-h-[200px] w-full max-w-full object-contain object-center brightness-[1.03] contrast-[1.02] saturate-[1.06] drop-shadow-[0_0_40px_rgba(80,100,255,0.22)] transition duration-300 ease-out will-change-transform hover:scale-[1.03] hover:drop-shadow-[0_0_60px_rgba(80,100,255,0.34)] lg:max-h-[240px] xl:max-h-[260px]"
+                  className="mx-auto h-auto max-h-[240px] w-full max-w-full object-contain object-center brightness-[1.03] contrast-[1.02] saturate-[1.06] drop-shadow-[0_0_40px_rgba(80,100,255,0.22)] transition duration-300 ease-out will-change-transform hover:scale-[1.03] hover:drop-shadow-[0_0_60px_rgba(80,100,255,0.34)] lg:max-h-[288px] xl:max-h-[312px]"
                   priority
                   sizes="(max-width: 1024px) 92vw, 36vw"
                 />

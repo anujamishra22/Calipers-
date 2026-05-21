@@ -11,6 +11,7 @@
 <%- include('../partials/header') %>
 
 <form method="post" action="<%= study ? '/admin/case-studies/' + study.id + '/update' : '/admin/case-studies' %>" class="card">
+  <%- include('../partials/csrf-field') %>
   <label for="headline">Headline</label>
   <input id="headline" type="text" name="headline" required value="<%= study ? study.headline : '' %>" />
 

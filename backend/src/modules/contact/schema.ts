@@ -9,6 +9,8 @@ export const createContactSchema = z.object({
   message: z.string().min(1).max(10000),
   budget: z.string().max(100).optional(),
   interests: z.array(z.string()).optional().default([]),
+  /** Honeypot — must be empty (bots often fill hidden fields). */
+  website: z.string().max(0).optional().default(""),
 });
 
 export const updateContactInfoSchema = z.object({

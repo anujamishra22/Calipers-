@@ -5,6 +5,7 @@
 <%- include('../partials/header') %>
 
 <form method="post" action="<%= article ? '/admin/articles/' + article.id + '/update' : '/admin/articles' %>" class="card">
+  <%- include('../partials/csrf-field') %>
   <label for="title">Title</label>
   <input id="title" type="text" name="title" required value="<%= article ? article.title : '' %>" />
 

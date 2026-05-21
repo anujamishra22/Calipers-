@@ -3,6 +3,10 @@ import path from "node:path";
 import { randomUUID } from "node:crypto";
 import multer from "multer";
 import type { Request } from "express";
+import {
+  isAllowedImageExtension,
+  isAllowedImageMime,
+} from "../utils/imageMagic.js";
 
 const uploadRoot = path.join(process.cwd(), "uploads");
 
@@ -19,8 +23,9 @@ const storage = multer.diskStorage({
     cb(null, dest);
   },
   filename(_req, file, cb) {
-    const ext = path.extname(file.originalname).toLowerCase() || ".bin";
-    cb(null, `${randomUUID()}${ext}`);
+    const ext = path.extname(file.originalname).toLowerCase();
+    const safeExt = isAllowedImageExtension(ext) ? ext : ".bin";
+    cb(null, `${randomUUID()}${safeExt}`);
   },
 });
 
@@ -29,8 +34,9 @@ function fileFilter(
   file: { mimetype: string; originalname: string },
   cb: multer.FileFilterCallback,
 ) {
-  if (!file.mimetype.startsWith("image/")) {
-    cb(new Error("Only image uploads are allowed"));
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (!isAllowedImageMime(file.mimetype) || !isAllowedImageExtension(ext)) {
+    cb(new Error("Only JPEG, PNG, GIF, and WebP images are allowed"));
     return;
   }
   cb(null, true);
@@ -39,5 +45,5 @@ function fileFilter(
 export const uploadMiddleware = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 5 * 1024 * 1024, files: 1 },
 });

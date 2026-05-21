@@ -1,6 +1,6 @@
 # Caliper backend
 
-Express + TypeScript + Prisma (SQLite). REST API for blogs, articles, case studies, contact info, and contact submissions. Includes a minimal EJS admin panel at `/admin`.
+Express + TypeScript + Prisma (SQLite). REST API for blogs, articles, case studies, contact info, and contact leads. Includes a minimal EJS admin panel at `/admin` with contact lead storage and CSV export.
 
 ## Setup
 
@@ -18,6 +18,8 @@ For production-style migrations you can use `npx prisma migrate dev --name init`
 
 - API: `http://localhost:4000/api`
 - Admin: `http://localhost:4000/admin` (login with `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `.env`)
+- Contact leads: `/admin/contact/submissions` — filter by status, export CSV at `/admin/contact/leads/export.csv`
+- Public contact form posts to `POST /api/contact` (stored in SQLite)
 
 ## Scripts
 

@@ -10,8 +10,24 @@ import { requireAdminPage } from "./middleware.js";
 import { parseJsonArray, parseJsonObject } from "../utils/jsonFields.js";
 import { segment } from "../utils/params.js";
 import { slugify } from "../utils/slugify.js";
+import {
+  contactLeadsCsvFilename,
+  contactLeadsToCsv,
+} from "./contactLeads.js";
+import {
+  attachCsrfToken,
+  createCsrfToken,
+  CSRF_COOKIE,
+  requireCsrfOnPost,
+  setCsrfCookie,
+} from "../middleware/csrf.js";
+import { requireAdminSameOrigin } from "../middleware/adminOrigin.js";
 
 export const adminRouter = Router();
+
+adminRouter.use(attachCsrfToken);
+adminRouter.use(requireCsrfOnPost);
+adminRouter.use(requireAdminSameOrigin);
 
 adminRouter.get("/login", (req, res) => {
   if (req.cookies?.admin_session) {
@@ -35,12 +51,15 @@ adminRouter.post(
     }
     const token = signToken({ sub: user.id, email: user.email });
     setAuthCookie(res, token);
+    const csrf = createCsrfToken();
+    setCsrfCookie(res, csrf);
     return res.redirect("/admin");
   }),
 );
 
 adminRouter.get("/logout", (_req, res) => {
   clearAuthCookie(res);
+  res.clearCookie(CSRF_COOKIE, { path: "/" });
   return res.redirect("/admin/login");
 });
 
@@ -349,12 +368,49 @@ adminRouter.post(
 
 adminRouter.get(
   "/contact/submissions",
-  asyncHandler(async (_req, res) => {
+  asyncHandler(async (req, res) => {
+    const statusRaw = String(req.query.status ?? "").trim();
+    const status =
+      statusRaw && ["NEW", "READ", "ARCHIVED"].includes(statusRaw)
+        ? (statusRaw as "NEW" | "READ" | "ARCHIVED")
+        : undefined;
     const rows = await prisma.contactSubmission.findMany({
+      where: status ? { status } : {},
       orderBy: { createdAt: "desc" },
-      take: 200,
+      take: 500,
     });
-    return res.render("contact/submissions", { title: "Contact submissions", rows });
+    const rowsWithInterests = rows.map((row) => ({
+      ...row,
+      interestsList: parseJsonArray(row.interests),
+    }));
+    return res.render("contact/submissions", {
+      title: "Contact leads",
+      rows: rowsWithInterests,
+      filterStatus: status ?? "",
+      total: rows.length,
+    });
+  }),
+);
+
+adminRouter.get(
+  "/contact/leads/export.csv",
+  asyncHandler(async (req, res) => {
+    const statusRaw = String(req.query.status ?? "").trim();
+    const status =
+      statusRaw && ["NEW", "READ", "ARCHIVED"].includes(statusRaw)
+        ? (statusRaw as "NEW" | "READ" | "ARCHIVED")
+        : undefined;
+    const rows = await prisma.contactSubmission.findMany({
+      where: status ? { status } : {},
+      orderBy: { createdAt: "desc" },
+    });
+    const csv = contactLeadsToCsv(rows);
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${contactLeadsCsvFilename()}"`,
+    );
+    return res.send(csv);
   }),
 );
 

@@ -18,7 +18,7 @@ export function Footer() {
       <div className="mx-auto grid max-w-[var(--container-max)] gap-10 px-4 py-16 md:grid-cols-4 md:px-[var(--container-padding)]">
         <div>
           <p className="font-[family-name:var(--font-display)] text-xl font-bold">
-            CALIPERS<span className="text-[var(--color-accent)]"> GenAI</span>
+            CALIPERS
           </p>
           <p className="mt-3 text-body-sm opacity-80">
             GenAI, AI & software—shipped with craft.

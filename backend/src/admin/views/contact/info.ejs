@@ -2,6 +2,7 @@
 <%- include('../partials/header') %>
 
 <form method="post" action="/admin/contact/info" class="card">
+  <%- include('../partials/csrf-field') %>
   <label for="email">Public email</label>
   <input id="email" type="email" name="email" required value="<%= info.email %>" />
 

@@ -28,6 +28,7 @@ contactInfoRouter.put(
 );
 
 export const contactSubmissionsRouter = Router();
+contactSubmissionsRouter.get("/export.csv", requireAuth, asyncHandler(ctrl.exportSubmissionsCsv));
 contactSubmissionsRouter.get("/", requireAuth, asyncHandler(ctrl.listSubmissions));
 contactSubmissionsRouter.patch(
   "/:id",

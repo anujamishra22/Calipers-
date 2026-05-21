@@ -6,11 +6,26 @@ import { prismaPaginate } from "../../utils/pagination.js";
 import type { CreateContactInput, UpdateContactInfoInput } from "./schema.js";
 import { segment } from "../../utils/params.js";
 import { listSubmissionsQuerySchema, patchSubmissionSchema } from "./schema.js";
+import {
+  contactLeadsCsvFilename,
+  contactLeadsToCsv,
+} from "../../admin/contactLeads.js";
 
 const CONTACT_INFO_ID = 1;
 
 export async function createSubmission(req: Request, res: Response) {
   const body = req.body as CreateContactInput;
+  if (body.website && body.website.length > 0) {
+    return res.status(201).json({
+      id: "accepted",
+      name: body.name,
+      email: body.email,
+      message: body.message,
+      status: "NEW",
+      createdAt: new Date().toISOString(),
+      interests: [],
+    });
+  }
   const row = await prisma.contactSubmission.create({
     data: {
       name: body.name,
@@ -100,4 +115,20 @@ export async function deleteSubmission(req: Request, res: Response) {
     throw new AppError(404, "NOT_FOUND", "Submission not found");
   }
   return res.status(204).send();
+}
+
+export async function exportSubmissionsCsv(req: Request, res: Response) {
+  const q = listSubmissionsQuerySchema.parse(req.query);
+  const where = q.status ? { status: q.status } : {};
+  const rows = await prisma.contactSubmission.findMany({
+    where,
+    orderBy: { createdAt: "desc" },
+  });
+  const csv = contactLeadsToCsv(rows);
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="${contactLeadsCsvFilename()}"`,
+  );
+  return res.send(csv);
 }

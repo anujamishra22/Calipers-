@@ -14,8 +14,9 @@ const cards = [
     href: "tel:+912240000000",
   },
   {
-    title: "Office",
-    value: "Bandra Kurla Complex, Mumbai 400051, India",
+    title: "Mumbai Office",
+    value:
+      "404, C-Wing, Eastern Court Junction\nTejapal & Parleshwar Road, Vile Parle East, Mumbai 400057",
     icon: MapPin,
     href: "https://maps.google.com",
   },
@@ -33,7 +34,9 @@ export function ContactInfo() {
           <c.icon className="h-6 w-6 shrink-0 text-[var(--color-accent)]" />
           <div>
             <p className="text-mono-sm font-bold uppercase">{c.title}</p>
-            <p className="mt-1 text-body-md text-[var(--color-void)]">{c.value}</p>
+            <p className="mt-1 whitespace-pre-line text-body-md text-[var(--color-void)]">
+              {c.value}
+            </p>
           </div>
         </a>
       ))}

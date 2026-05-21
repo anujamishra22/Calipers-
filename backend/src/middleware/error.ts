@@ -26,7 +26,11 @@ export function errorHandler(err: unknown, _req: Request, res: Response, next: N
       error: { code: "UPLOAD_ERROR", message: err.message },
     });
   }
-  if (err instanceof Error && err.message === "Only image uploads are allowed") {
+  if (
+    err instanceof Error &&
+    (err.message === "Only image uploads are allowed" ||
+      err.message === "Only JPEG, PNG, GIF, and WebP images are allowed")
+  ) {
     return res.status(400).json({
       error: { code: "INVALID_FILE_TYPE", message: err.message },
     });
